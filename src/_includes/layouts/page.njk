@@ -1,0 +1,12 @@
+---
+layout: layouts/base.njk
+---
+<article class="wrap page{% if image %} page-with-image{% endif %}">
+  {% if image %}
+    <div class="page-image"><img src="{{ image }}" alt="{{ title }}" sizes="(min-width: 900px) 420px, 92vw" loading="eager"></div>
+  {% endif %}
+  <div>
+    <h1>{{ heading or title }}</h1>
+    <div class="prose">{{ content | safe }}</div>
+  </div>
+</article>

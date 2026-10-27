@@ -1,0 +1,246 @@
+# Settings for the website editor at https://app.pagescms.org
+# (sign in with GitHub, pick this repository, and edit everything with forms).
+media:
+  input: src/images/uploads
+  output: /images/uploads
+  categories: [image]
+
+content:
+  - name: artworks
+    label: Artwork
+    description: Every piece in your portfolio. Click "Add an entry" to post new art.
+    type: collection
+    path: src/artworks
+    exclude: [artworks.11tydata.js]
+    filename: "{primary}.md"
+    view:
+      fields: [image, title, year, status, featured]
+      primary: title
+      sort: [date, title]
+      default:
+        sort: date
+        order: desc
+    fields:
+      - name: title
+        label: Title
+        type: string
+        required: true
+      - name: image
+        label: Main image
+        description: The photo shown in the gallery. Use a good-quality JPG or PNG.
+        type: image
+        required: true
+      - name: more_images
+        label: Extra images (optional)
+        description: Close-ups, details, the piece framed or hanging on a wall…
+        type: image
+        list: true
+      - name: categories
+        label: Collections
+        description: Pick every style, era and theme this piece belongs to.
+        type: reference
+        options:
+          collection: categories
+          search: title
+          value: "{fields.title}"
+          label: "{fields.title}"
+          multiple: true
+      - name: status
+        label: Availability
+        type: select
+        default: available
+        options:
+          values:
+            - { value: available, label: "Available — original for sale" }
+            - { value: prints, label: "Prints available" }
+            - { value: inquire, label: "Price on request" }
+            - { value: sold, label: "Sold" }
+            - { value: nfs, label: "Not for sale (portfolio only)" }
+      - name: price
+        label: Price
+        description: Numbers only, e.g. 450. Leave empty to hide the price.
+        type: number
+      - name: etsy_url
+        label: Etsy listing link (optional)
+        description: Paste the web address of this piece on Etsy to show a "Buy on Etsy" button.
+        type: string
+      - name: paypal_link
+        label: PayPal payment link (optional)
+        description: Only needed for special cases. If empty, a PayPal button is created automatically from the price and your PayPal email in Site settings.
+        type: string
+      - name: year
+        label: Year made
+        description: e.g. 2024, or c. 1990s
+        type: string
+      - name: medium
+        label: Medium
+        description: e.g. Oil on canvas
+        type: string
+      - name: size
+        label: Size
+        description: e.g. 24 × 18 in
+        type: string
+      - name: body
+        label: Description / story
+        type: rich-text
+      - name: featured
+        label: Feature on the home page
+        type: boolean
+      - name: alt
+        label: Image description for screen readers (optional)
+        type: string
+      - name: date
+        label: Date posted
+        description: Newest pieces appear first.
+        type: date
+      - name: draft
+        label: Hide from the website (draft)
+        type: boolean
+
+  - name: categories
+    label: Collections
+    description: Styles, eras and themes used to organise the gallery.
+    type: collection
+    path: src/categories
+    exclude: [categories.11tydata.js]
+    filename: "{primary}.md"
+    view:
+      fields: [title, group, order]
+      primary: title
+      sort: [order, title]
+      default:
+        sort: order
+        order: asc
+    fields:
+      - name: title
+        label: Name
+        description: If you rename a collection, re-tick it on its artwork.
+        type: string
+        required: true
+      - name: group
+        label: Kind of collection
+        type: select
+        default: Style
+        options:
+          values:
+            - { value: Style, label: "Style (e.g. Abstract, Portraits)" }
+            - { value: Era, label: "Era (e.g. 1990s, Recent Work)" }
+            - { value: Theme, label: "Theme (e.g. Florals, By the Sea)" }
+      - name: image
+        label: Cover image (optional)
+        description: If empty, the newest piece in the collection is used.
+        type: image
+      - name: order
+        label: Display order
+        description: Lower numbers show first.
+        type: number
+      - name: body
+        label: Description
+        type: rich-text
+
+  - name: pages
+    label: Pages
+    description: About, Contact and Thank-you pages.
+    type: collection
+    path: src/pages
+    exclude: [pages.11tydata.json]
+    view:
+      fields: [title]
+      primary: title
+    operations:
+      create: false
+      delete: false
+      rename: false
+    fields:
+      - name: title
+        label: Menu / browser title
+        type: string
+      - name: heading
+        label: Page heading
+        type: string
+      - name: image
+        label: Photo (optional)
+        type: image
+      - name: body
+        label: Text
+        type: rich-text
+      - name: permalink
+        type: string
+        hidden: true
+      - name: layout
+        type: string
+        hidden: true
+
+  - name: settings
+    label: Site settings
+    description: Your name, home page text, contact details, social media and PayPal.
+    type: file
+    path: src/_data/site.json
+    format: json
+    fields:
+      - name: title
+        label: Site name
+        type: string
+      - name: tagline
+        label: Tagline
+        type: string
+      - name: description
+        label: Short description (shown in Google and share previews)
+        type: text
+      - name: url
+        label: Website address
+        description: e.g. https://www.donnasart.com — used for share links.
+        type: string
+      - name: hero_heading
+        label: Home page headline
+        type: string
+      - name: hero_text
+        label: Home page intro
+        type: text
+      - name: hero_image
+        label: Home page image
+        type: image
+      - name: email
+        label: Contact email
+        type: string
+      - name: contact_form_endpoint
+        label: Contact form address (optional)
+        description: Paste your free Formspree form link (https://formspree.io/f/…) so messages arrive in your inbox. If empty, the form opens the visitor's email app instead.
+        type: string
+      - name: commissions_open
+        label: Accepting commissions / art requests
+        type: boolean
+      - name: commissions_text
+        label: Commissions text
+        type: text
+      - name: social
+        label: Social media links
+        description: Paste full web addresses. Leave empty to hide.
+        type: object
+        fields:
+          - { name: instagram, label: Instagram, type: string }
+          - { name: facebook, label: Facebook, type: string }
+          - { name: pinterest, label: Pinterest, type: string }
+          - { name: tiktok, label: TikTok, type: string }
+          - { name: youtube, label: YouTube, type: string }
+          - { name: threads, label: Threads, type: string }
+          - { name: x, label: X (Twitter), type: string }
+          - { name: etsy_shop, label: Etsy shop, type: string }
+      - name: paypal
+        label: PayPal checkout
+        type: object
+        fields:
+          - name: email
+            label: PayPal email address
+            description: The email of your PayPal account. Leave empty to turn off PayPal buttons.
+            type: string
+          - name: currency
+            label: Currency
+            type: select
+            default: USD
+            options:
+              values: [USD, CAD, GBP, EUR, AUD, NZD]
+          - name: shipping
+            label: Flat shipping cost
+            description: Added to each PayPal purchase. 0 for free shipping.
+            type: number

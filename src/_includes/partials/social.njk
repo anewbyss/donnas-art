@@ -1,0 +1,11 @@
+{%- set networks = [
+  ["instagram", "Instagram"], ["facebook", "Facebook"], ["pinterest", "Pinterest"],
+  ["tiktok", "TikTok"], ["youtube", "YouTube"], ["threads", "Threads"], ["x", "X"],
+  ["etsy_shop", "Etsy shop"]
+] -%}
+<ul class="social">
+  {% for key, label in networks %}{% if site.social[key] %}
+    <li><a href="{{ site.social[key] }}" target="_blank" rel="noopener me">{{ label }}</a></li>
+  {% endif %}{% endfor %}
+  {% if site.email %}<li><a href="mailto:{{ site.email }}">Email</a></li>{% endif %}
+</ul>

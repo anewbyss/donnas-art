@@ -1,0 +1,14 @@
+{#- Grid of collection tiles. Expects `cats`. -#}
+<div class="tiles">
+  {% for c in cats %}
+    {%- set works = collections.artworks | inCategory(c.data.title) -%}
+    {%- set cover = c.data.image or (works[0].data.image if works.length) -%}
+    <a class="tile" href="{{ c.url }}">
+      {% if cover %}<img src="{{ cover }}" alt="" sizes="(min-width: 900px) 33vw, 92vw">{% endif %}
+      <span class="tile-text">
+        <span class="tile-title">{{ c.data.title }}</span>
+        <span class="tile-meta">{% if c.data.group %}{{ c.data.group }} · {% endif %}{{ works.length }} piece{{ "" if works.length == 1 else "s" }}</span>
+      </span>
+    </a>
+  {% endfor %}
+</div>

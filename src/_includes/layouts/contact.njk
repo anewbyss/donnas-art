@@ -1,0 +1,39 @@
+---
+layout: layouts/base.njk
+---
+<section class="wrap contact">
+  <div>
+    <h1>{{ heading or title }}</h1>
+    <div class="prose">{{ content | safe }}</div>
+
+    {% if site.commissions_open %}
+      <div class="callout" id="commissions">
+        <h2>Commissions are open</h2>
+        <p>{{ site.commissions_text }}</p>
+      </div>
+    {% endif %}
+
+    <h2 class="small-heading">Find me online</h2>
+    {% include "partials/social.njk" %}
+  </div>
+
+  <form class="contact-form" id="request"
+        {% if site.contact_form_endpoint %}action="{{ site.contact_form_endpoint }}" method="POST"{% else %}data-mailto="{{ site.email }}"{% endif %}>
+    <h2>Send a message</h2>
+    <label>Your name<input name="name" required autocomplete="name"></label>
+    <label>Your email<input name="email" type="email" required autocomplete="email"></label>
+    <label>What's this about?
+      <select name="topic">
+        {% if site.commissions_open %}<option>Commission / art request</option>{% endif %}
+        <option>Buying a piece</option>
+        <option>Prints</option>
+        <option>Something else</option>
+      </select>
+    </label>
+    <label>Artwork (optional)<input name="artwork" id="about-field" placeholder="e.g. the title of a piece"></label>
+    <label>Message<textarea name="message" rows="6" required placeholder="Ideas, sizes, budget, deadlines — anything that helps."></textarea></label>
+    <input type="text" name="_gotcha" class="sr-only" tabindex="-1" autocomplete="off" aria-hidden="true">
+    <button class="btn" type="submit">Send message</button>
+    {% if not site.contact_form_endpoint %}<p class="muted small">This opens your email app with the message ready to send{% if site.email %}, or email me directly at <a href="mailto:{{ site.email }}">{{ site.email }}</a>{% endif %}.</p>{% endif %}
+  </form>
+</section>

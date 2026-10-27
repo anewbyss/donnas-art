@@ -1,0 +1,17 @@
+---
+layout: layouts/base.njk
+title: Collections
+description: Browse artwork by style, era and theme.
+permalink: /collections/
+---
+<section class="wrap page-head">
+  <h1>Collections</h1>
+  <p class="lead">Browse the work by style, era and theme.</p>
+</section>
+{% for group in collections.categories | groupCategories %}
+<section class="wrap section">
+  <h2>{{ group.name }}</h2>
+  {% set cats = group.items %}
+  {% include "partials/collection-tiles.njk" %}
+</section>
+{% endfor %}
