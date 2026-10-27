@@ -1,0 +1,43 @@
+{#- Purchase options for an artwork page. -#}
+{%- set showPrice = price and status in ["available", "prints"] -%}
+<div class="buy">
+  {% if status == "available" or status == "prints" %}
+    {% if showPrice %}<p class="price">{{ price | money(site.paypal.currency) }}{% if status == "prints" %} <span class="muted small">per print</span>{% endif %}</p>{% endif %}
+    <div class="buy-buttons">
+      {% if etsy_url %}
+        <a class="btn btn-etsy" href="{{ etsy_url }}" target="_blank" rel="noopener">Buy on Etsy</a>
+      {% endif %}
+      {% if paypal_link %}
+        <a class="btn btn-paypal" href="{{ paypal_link }}" target="_blank" rel="noopener">Buy with PayPal</a>
+      {% elif site.paypal.email and price %}
+        {# Standard PayPal "Buy Now" checkout — only needs your PayPal email address. #}
+        <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
+          <input type="hidden" name="cmd" value="_xclick">
+          <input type="hidden" name="business" value="{{ site.paypal.email }}">
+          <input type="hidden" name="item_name" value="{{ title }}{% if status == 'prints' %} (print){% endif %}">
+          <input type="hidden" name="amount" value="{{ price }}">
+          <input type="hidden" name="currency_code" value="{{ site.paypal.currency or 'USD' }}">
+          {% if site.paypal.shipping %}<input type="hidden" name="shipping" value="{{ site.paypal.shipping }}">{% endif %}
+          <input type="hidden" name="no_shipping" value="2">
+          <input type="hidden" name="return" value="{{ '/thank-you/' | absolute(env.siteUrl) }}">
+          <input type="hidden" name="cancel_return" value="{{ page.url | absolute(env.siteUrl) }}">
+          <button class="btn btn-paypal" type="submit">Buy with PayPal</button>
+        </form>
+      {% endif %}
+      <a class="btn btn-ghost" href="/contact/?about={{ title | urlencode }}#request">Ask a question</a>
+    </div>
+    {% if site.paypal.shipping and not paypal_link and site.paypal.email and price %}
+      <p class="muted small">Plus {{ site.paypal.shipping | money(site.paypal.currency) }} shipping.</p>
+    {% endif %}
+  {% elif status == "inquire" %}
+    <div class="buy-buttons">
+      <a class="btn" href="/contact/?about={{ title | urlencode }}#request">Enquire about this piece</a>
+      {% if etsy_url %}<a class="btn btn-etsy" href="{{ etsy_url }}" target="_blank" rel="noopener">View on Etsy</a>{% endif %}
+    </div>
+  {% elif status == "sold" %}
+    <p class="muted">This original has found a home.</p>
+    <div class="buy-buttons">
+      <a class="btn btn-ghost" href="/contact/?about={{ ('Something like ' + title) | urlencode }}#request">Request something similar</a>
+    </div>
+  {% endif %}
+</div>

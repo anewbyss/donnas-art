@@ -1,0 +1,20 @@
+---
+layout: layouts/base.njk
+---
+{%- set works = collections.artworks | inCategory(title) -%}
+<section class="wrap page-head">
+  <p class="eyebrow"><a href="/collections/">Collections</a>{% if group %} · {{ group }}{% endif %}</p>
+  <h1>{{ title }}</h1>
+  {% if content | trim %}<div class="prose lead">{{ content | safe }}</div>{% endif %}
+</section>
+<section class="wrap">
+  {% if works.length %}
+    <div class="grid masonry">
+      {% for art in works %}{% include "partials/card.njk" %}{% endfor %}
+    </div>
+  {% else %}
+    <p class="muted">New pieces are coming to this collection soon.</p>
+  {% endif %}
+  {% set shareUrl = page.url | absolute(env.siteUrl) %}{% set shareTitle = title + " — " + site.title %}{% set shareImage = (image or site.hero_image) | absolute(env.siteUrl) %}
+  {% include "partials/share.njk" %}
+</section>

@@ -1,0 +1,72 @@
+---
+layout: layouts/base.njk
+---
+{%- set images = image | withExtras(more_images) -%}
+{%- set pageUrl = page.url | absolute(env.siteUrl) -%}
+{%- set nb = collections.artworks | neighbours(page.url) -%}
+{%- set cats = collections.categories | categoriesFor(categories) -%}
+<article class="wrap artwork">
+  <div class="artwork-media">
+    {% for img in images %}
+      <a class="zoom" href="{{ img }}" data-lightbox="artwork" aria-label="View larger">
+        <img src="{{ img }}" alt="{{ alt or title }}{% if not loop.first %} (view {{ loop.index }}){% endif %}"
+             sizes="(min-width: 1100px) 680px, 92vw"{% if loop.first %} loading="eager" fetchpriority="high"{% endif %}>
+      </a>
+    {% endfor %}
+  </div>
+
+  <div class="artwork-info">
+    <p class="eyebrow"><a href="/gallery/">← Gallery</a></p>
+    <h1>{{ title }}</h1>
+    <dl class="facts">
+      {% if year %}<div><dt>Year</dt><dd>{{ year }}</dd></div>{% endif %}
+      {% if medium %}<div><dt>Medium</dt><dd>{{ medium }}</dd></div>{% endif %}
+      {% if size %}<div><dt>Size</dt><dd>{{ size }}</dd></div>{% endif %}
+      {% if status %}<div><dt>Status</dt><dd><span class="status status-{{ status }}">{{ status | statusLabel }}</span></dd></div>{% endif %}
+    </dl>
+
+    {% if content | trim %}<div class="prose">{{ content | safe }}</div>{% endif %}
+
+    {% include "partials/buy.njk" %}
+
+    {% if cats.length %}
+      <p class="tags">
+        {% for c in cats %}<a class="btn-chip" href="{{ c.url }}">{{ c.data.title }}</a>{% endfor %}
+      </p>
+    {% endif %}
+
+    {% set shareUrl = pageUrl %}{% set shareTitle = title + " by " + site.title %}{% set shareImage = image | absolute(env.siteUrl) %}
+    {% include "partials/share.njk" %}
+  </div>
+</article>
+
+<nav class="wrap prev-next" aria-label="More artwork">
+  {% if nb.prev %}<a href="{{ nb.prev.url }}">← {{ nb.prev.data.title }}</a>{% else %}<span></span>{% endif %}
+  {% if nb.next %}<a href="{{ nb.next.url }}">{{ nb.next.data.title }} →</a>{% endif %}
+</nav>
+
+{% set rel = collections.artworks | related(page.url, 4) %}
+{% if rel.length %}
+<section class="wrap section">
+  <h2>You may also like</h2>
+  <div class="grid">
+    {% for art in rel %}{% include "partials/card.njk" %}{% endfor %}
+  </div>
+</section>
+{% endif %}
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "VisualArtwork",
+  "name": {{ title | json | safe }},
+  "image": {{ image | absolute(env.siteUrl) | json | safe }},
+  "url": {{ pageUrl | json | safe }},
+  "creator": { "@type": "Person", "name": {{ site.title | json | safe }} }
+  {%- if medium %}, "artMedium": {{ medium | json | safe }}{% endif %}
+  {%- if year %}, "dateCreated": {{ year | string | json | safe }}{% endif %}
+  {%- if status == "available" and price %},
+  "offers": { "@type": "Offer", "price": {{ price | json | safe }}, "priceCurrency": {{ site.paypal.currency | json | safe }}, "availability": "https://schema.org/InStock" }
+  {%- endif %}
+}
+</script>

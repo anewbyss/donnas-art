@@ -1,0 +1,28 @@
+{
+  "title": "Donna's Art",
+  "tagline": "Original paintings, drawings & prints",
+  "description": "The living portfolio of Donna — original artwork across styles, eras and themes. Browse the gallery, buy originals and prints, or request a commission.",
+  "url": "https://example.com",
+  "hero_heading": "Art made by hand, with heart",
+  "hero_text": "Welcome to my studio online. Wander through decades of work, find a piece that speaks to you, or ask me to create something just for you.",
+  "hero_image": "/images/uploads/sample-golden-hour.jpg",
+  "email": "hello@example.com",
+  "contact_form_endpoint": "",
+  "commissions_open": true,
+  "commissions_text": "I love creating custom pieces — portraits of people and pets, favourite places, or something completely new. Tell me what you have in mind and I'll get back to you with ideas, sizes and pricing.",
+  "social": {
+    "instagram": "",
+    "facebook": "",
+    "pinterest": "",
+    "tiktok": "",
+    "youtube": "",
+    "threads": "",
+    "x": "",
+    "etsy_shop": ""
+  },
+  "paypal": {
+    "email": "",
+    "currency": "USD",
+    "shipping": 0
+  }
+}
