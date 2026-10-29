@@ -30,9 +30,14 @@ fast-loading versions, so large photos are fine to upload.
    with GitHub, and allow it access to this repository.
 3. **Fill in Site settings** in the editor: name, email, social links, PayPal email.
 4. **Replace the sample artwork** (files starting with `sample-`) with real pieces.
-5. *(Optional)* **Custom domain** such as `donnasart.com`: buy one from any registrar,
-   then add it under **Settings → Pages → Custom domain** and update
-   **Website address** in Site settings.
+5. *(Optional)* **Custom domain** such as `opaloccult.com`:
+   1. Buy the domain from any registrar (or from Shopify, if you also use Shopify).
+   2. In the domain's DNS settings, add four **A** records for `@` pointing to
+      `185.199.108.153`, `185.199.109.153`, `185.199.110.153` and `185.199.111.153`,
+      and a **CNAME** record for `www` pointing to `anewbyss.github.io`.
+   3. In GitHub, go to **Settings → Pages → Custom domain**, enter the domain, save,
+      and tick **Enforce HTTPS** once it becomes available (this can take up to a day).
+   4. Update **Website address** in Site settings.
 6. *(Optional)* **Contact form to inbox**: create a free form at
    [formspree.io](https://formspree.io) and paste its link into Site settings.
 

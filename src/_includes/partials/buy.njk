@@ -4,6 +4,10 @@
   {% if status == "available" or status == "prints" %}
     {% if showPrice %}<p class="price">{{ price | money(site.paypal.currency) }}{% if status == "prints" %} <span class="muted small">per print</span>{% endif %}</p>{% endif %}
     <div class="buy-buttons">
+      {% if checkout_url %}
+        {# Shopify, Stripe, Square or any other checkout link #}
+        <a class="btn" href="{{ checkout_url }}" target="_blank" rel="noopener noreferrer">Buy now</a>
+      {% endif %}
       {% if etsy_url %}
         <a class="btn" href="{{ etsy_url }}" target="_blank" rel="noopener noreferrer">Buy on Etsy</a>
       {% endif %}
