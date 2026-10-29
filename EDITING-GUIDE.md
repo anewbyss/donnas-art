@@ -39,12 +39,25 @@ On the left you'll see four sections: **Artwork**, **Collections**, **Pages** an
 
 | You set… | Visitors see… |
 |---|---|
+| A **Checkout link** (Shopify, Stripe or Square) | a **Buy now** button |
 | An **Etsy listing link** | a **Buy on Etsy** button |
 | A **Price** + your **PayPal email** (in Site settings) | a **Buy with PayPal** button that takes them to PayPal checkout |
 | Both | both buttons — they choose |
 | Neither | an **Ask about this work** button that goes to your contact form |
 
 PayPal sends you an email for every sale, including the buyer's shipping address.
+
+### Getting a checkout link
+
+- **Shopify** (from $5/month on the Starter plan): add the piece as a product, open it,
+  and copy its link from **Share** or **View**. That link is the product page in your
+  shop. Shopify handles payment, shipping and tax.
+- **Stripe Payment Links** (no monthly fee, a small cost per sale): in Stripe, go to
+  **Payment Links → New**, add the piece and its price, tick "Collect customer addresses",
+  and copy the link.
+- **Square** (no monthly fee): **Online Checkout → Create link**.
+
+Paste the link into the artwork's **Checkout link** field and save.
 
 ## Collections (styles, eras, themes)
 

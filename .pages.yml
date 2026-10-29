@@ -60,6 +60,10 @@ content:
         label: Price
         description: Numbers only, e.g. 450. Leave empty to hide the price.
         type: number
+      - name: checkout_url
+        label: Checkout link — Shopify, Stripe or Square (optional)
+        description: Paste a checkout or product link from your shop to show a "Buy now" button. See the editing guide for where to find it.
+        type: string
       - name: etsy_url
         label: Etsy listing link (optional)
         description: Paste the web address of this piece on Etsy to show a "Buy on Etsy" button.
