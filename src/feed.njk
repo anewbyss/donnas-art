@@ -18,7 +18,7 @@ eleventyExcludeFromCollections: true
     <link href="{{ link }}"/>
     <id>{{ link }}</id>
     <updated>{{ art.date | isoDate }}</updated>
-    <content type="html">{{ ('<p><img src="' + (art.data.image | absolute(env.siteUrl)) + '" alt=""></p>' + art.content) | escape }}</content>
+    <content type="html">{{ ('<p><img src="' + ((art.data.image | imageUrl(1200)) | absolute(env.siteUrl)) + '" alt=""></p>' + art.content) | escape }}</content>
   </entry>
   {%- endfor %}
 </feed>

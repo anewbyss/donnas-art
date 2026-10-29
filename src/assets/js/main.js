@@ -1,12 +1,13 @@
-// Small enhancements: mobile menu, gallery filters, image viewer, sharing, contact form.
+// Small enhancements: protections, gallery filters, image viewer, sharing, contact form.
 (() => {
-  // Mobile menu
-  const toggle = document.querySelector(".nav-toggle");
-  const nav = document.getElementById("site-nav");
-  toggle?.addEventListener("click", () => {
-    const open = nav.classList.toggle("is-open");
-    toggle.setAttribute("aria-expanded", open);
-  });
+  // Stop other websites from showing this site inside a frame of their own.
+  if (window.top !== window.self) window.top.location = window.self.location;
+
+  // Discourage saving artwork: no right-click menu, dragging or long-press
+  // saving on images. (Screenshots can't be blocked, but casual copying is.)
+  const isArt = (el) => el instanceof HTMLImageElement;
+  document.addEventListener("contextmenu", (e) => { if (isArt(e.target)) e.preventDefault(); });
+  document.addEventListener("dragstart", (e) => { if (isArt(e.target)) e.preventDefault(); });
 
   // Gallery filters
   const grid = document.getElementById("gallery-grid");
@@ -14,7 +15,7 @@
     const chips = [...document.querySelectorAll("[data-filter]")];
     const availableOnly = document.getElementById("available-only");
     const empty = document.querySelector(".empty-note");
-    const cards = [...grid.querySelectorAll(".card")];
+    const cards = [...grid.querySelectorAll(".plate")];
     let active = new URLSearchParams(location.search).get("filter") || "all";
 
     const apply = () => {
@@ -97,7 +98,7 @@
   });
 
   // Contact form
-  const form = document.querySelector(".contact-form");
+  const form = document.querySelector("form.letter");
   if (form) {
     const about = new URLSearchParams(location.search).get("about");
     if (about) {
@@ -110,8 +111,9 @@
     form.addEventListener("submit", async (e) => {
       const data = new FormData(form);
       e.preventDefault();
+      if (data.get("_gotcha")) return; // filled in by a spam robot
       const done = (msg) => {
-        form.querySelectorAll("label, button, .muted").forEach((n) => n.remove());
+        form.querySelectorAll("label, button, .muted, .trap").forEach((n) => n.remove());
         const p = document.createElement("p");
         p.className = "form-status";
         p.textContent = msg;
@@ -129,7 +131,7 @@
       try {
         const res = await fetch(form.action, { method: "POST", body: data, headers: { Accept: "application/json" } });
         if (!res.ok) throw new Error();
-        done("Thank you! Your message is on its way — I'll be in touch soon.");
+        done("Your letter is on its way. I'll be in touch soon.");
       } catch {
         form.submit();
       }

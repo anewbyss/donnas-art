@@ -3,53 +3,49 @@ layout: layouts/base.njk
 permalink: /
 ---
 {%- set featured = collections.artworks | featured -%}
-{%- set showcase = featured if featured.length else collections.artworks -%}
-<section class="hero">
-  <div class="wrap hero-inner">
-    <div class="hero-text">
-      <p class="eyebrow">{{ site.tagline }}</p>
-      <h1>{{ site.hero_heading }}</h1>
-      <p class="lead">{{ site.hero_text }}</p>
-      <p class="buy-buttons">
-        <a class="btn" href="/gallery/">Explore the gallery</a>
-        {% if site.commissions_open %}<a class="btn btn-ghost" href="/contact/#request">Request a piece</a>{% endif %}
-      </p>
+{%- set showcase = (featured if featured.length >= 3 else collections.artworks) | head(3) -%}
+<section class="frontispiece">
+  {% if site.hero_image %}
+    <div class="arch">
+      <img src="{{ site.hero_image }}" alt="" draggable="false" sizes="(min-width: 900px) 520px, 80vw" loading="eager" fetchpriority="high">
     </div>
-    {% if site.hero_image %}
-      <div class="hero-image"><img src="{{ site.hero_image }}" alt="Featured artwork" sizes="(min-width: 900px) 50vw, 92vw" loading="eager" fetchpriority="high"></div>
-    {% endif %}
-  </div>
+  {% endif %}
+  <p class="mono kicker">{{ site.tagline }}</p>
+  <h1>{{ site.hero_heading }}</h1>
+  <p class="incant">{{ site.hero_text }}</p>
+  <p class="mono enter">
+    <a href="/gallery/">Enter the works →</a>
+    {% if site.commissions_open %}<a href="/contact/#request">Commission a piece →</a>{% endif %}
+  </p>
 </section>
 
-<section class="wrap section">
-  <div class="section-head">
-    <h2>{{ "Featured work" if featured.length else "Latest work" }}</h2>
-    <a href="/gallery/">View all {{ collections.artworks.length }} pieces →</a>
-  </div>
-  <div class="grid masonry">
-    {% for art in showcase | head(9) %}{% include "partials/card.njk" %}{% endfor %}
+{% if showcase.length %}
+<section class="chapter">
+  <header class="chapter-head">
+    <h2>{{ "Upon the altar" if featured.length >= 3 else "Newest works" }}</h2>
+    <a class="mono" href="/gallery/">All {{ collections.artworks.length }} plates →</a>
+  </header>
+  <div class="triptych">
+    {% for art in showcase %}{% include "partials/card.njk" %}{% endfor %}
   </div>
 </section>
+{% endif %}
 
 {% if collections.categories.length %}
-<section class="wrap section">
-  <div class="section-head">
-    <h2>Collections</h2>
-    <a href="/collections/">All collections →</a>
-  </div>
-  {% set cats = collections.categories | head(6) %}
+<section class="chapter">
+  <header class="chapter-head">
+    <h2>The arcana</h2>
+    <a class="mono" href="/collections/">By style, era & theme →</a>
+  </header>
+  {% set cats = collections.categories | head(8) %}
   {% include "partials/collection-tiles.njk" %}
 </section>
 {% endif %}
 
 {% if site.commissions_open %}
-<section class="wrap section">
-  <div class="callout callout-wide">
-    <div>
-      <h2>Looking for something special?</h2>
-      <p>{{ site.commissions_text }}</p>
-    </div>
-    <a class="btn" href="/contact/#request">Start a request</a>
-  </div>
+<section class="chapter summons">
+  <p class="mono kicker">Commissions are open</p>
+  <p class="summons-line">{{ site.commissions_text }}</p>
+  <a class="btn" href="/contact/#request">Send word</a>
 </section>
 {% endif %}

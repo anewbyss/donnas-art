@@ -99,7 +99,7 @@ content:
 
   - name: categories
     label: Collections
-    description: Styles, eras and themes used to organise the gallery.
+    description: Styles, eras and themes used to organise the gallery (called "Arcana" on the website).
     type: collection
     path: src/categories
     exclude: [categories.11tydata.js]

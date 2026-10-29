@@ -5,10 +5,10 @@
     {% if showPrice %}<p class="price">{{ price | money(site.paypal.currency) }}{% if status == "prints" %} <span class="muted small">per print</span>{% endif %}</p>{% endif %}
     <div class="buy-buttons">
       {% if etsy_url %}
-        <a class="btn btn-etsy" href="{{ etsy_url }}" target="_blank" rel="noopener">Buy on Etsy</a>
+        <a class="btn" href="{{ etsy_url }}" target="_blank" rel="noopener noreferrer">Buy on Etsy</a>
       {% endif %}
       {% if paypal_link %}
-        <a class="btn btn-paypal" href="{{ paypal_link }}" target="_blank" rel="noopener">Buy with PayPal</a>
+        <a class="btn" href="{{ paypal_link }}" target="_blank" rel="noopener noreferrer">Buy with PayPal</a>
       {% elif site.paypal.email and price %}
         {# Standard PayPal "Buy Now" checkout — only needs your PayPal email address. #}
         <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
@@ -21,10 +21,10 @@
           <input type="hidden" name="no_shipping" value="2">
           <input type="hidden" name="return" value="{{ '/thank-you/' | absolute(env.siteUrl) }}">
           <input type="hidden" name="cancel_return" value="{{ page.url | absolute(env.siteUrl) }}">
-          <button class="btn btn-paypal" type="submit">Buy with PayPal</button>
+          <button class="btn" type="submit">Buy with PayPal</button>
         </form>
       {% endif %}
-      <a class="btn btn-ghost" href="/contact/?about={{ title | urlencode }}#request">Ask a question</a>
+      <a class="btn btn-quiet" href="/contact/?about={{ title | urlencode }}#request">Ask about this work</a>
     </div>
     {% if site.paypal.shipping and not paypal_link and site.paypal.email and price %}
       <p class="muted small">Plus {{ site.paypal.shipping | money(site.paypal.currency) }} shipping.</p>
@@ -32,12 +32,12 @@
   {% elif status == "inquire" %}
     <div class="buy-buttons">
       <a class="btn" href="/contact/?about={{ title | urlencode }}#request">Enquire about this piece</a>
-      {% if etsy_url %}<a class="btn btn-etsy" href="{{ etsy_url }}" target="_blank" rel="noopener">View on Etsy</a>{% endif %}
+      {% if etsy_url %}<a class="btn" href="{{ etsy_url }}" target="_blank" rel="noopener noreferrer">View on Etsy</a>{% endif %}
     </div>
   {% elif status == "sold" %}
-    <p class="muted">This original has found a home.</p>
+    <p class="muted">This original now lives in a private collection.</p>
     <div class="buy-buttons">
-      <a class="btn btn-ghost" href="/contact/?about={{ ('Something like ' + title) | urlencode }}#request">Request something similar</a>
+      <a class="btn btn-quiet" href="/contact/?about={{ ('Something like ' + title) | urlencode }}#request">Request something similar</a>
     </div>
   {% endif %}
 </div>

@@ -39,14 +39,16 @@ On the left you'll see four sections: **Artwork**, **Collections**, **Pages** an
 
 | You set… | Visitors see… |
 |---|---|
-| An **Etsy listing link** | an orange **Buy on Etsy** button |
-| A **Price** + your **PayPal email** (in Site settings) | a yellow **Buy with PayPal** button that takes them to PayPal checkout |
+| An **Etsy listing link** | a **Buy on Etsy** button |
+| A **Price** + your **PayPal email** (in Site settings) | a **Buy with PayPal** button that takes them to PayPal checkout |
 | Both | both buttons — they choose |
-| Neither | an **Ask a question** button that goes to your contact form |
+| Neither | an **Ask about this work** button that goes to your contact form |
 
 PayPal sends you an email for every sale, including the buyer's shipping address.
 
 ## Collections (styles, eras, themes)
+
+On the website these are called **Arcana**. In the editor they're under **Collections**.
 
 Collections organise your gallery. Each one gets its own page you can share,
 and appears as a filter button on the Gallery page.
@@ -79,6 +81,26 @@ social-media links and PayPal details all live in **Site settings**.
 Every artwork and collection page has **Share** buttons (Facebook, Pinterest, X,
 WhatsApp, email, copy link). Links shared on social media show a preview with the image.
 Fans can also follow new work through the RSS link at the bottom of every page.
+
+## How your art is protected
+
+These protections are automatic. You don't need to do anything.
+
+- **Your original photos are never published.** Visitors only get resized copies
+  (no bigger than 1600 pixels), which look sharp on screen but are too small to print well.
+- **Hidden photo details are removed.** Phone photos can contain the location where they
+  were taken. That information is removed from every image on the site.
+- **Saving is discouraged.** Right-clicking, dragging and long-pressing images is turned off.
+  (Nobody can stop screenshots, but this stops casual copying.)
+- **AI companies are told no.** The site asks AI crawlers (OpenAI, Google's AI, Anthropic,
+  Meta, Common Crawl and others) not to use your work for training. Reputable companies
+  follow this request. Normal Google search still works, so people can find you.
+- **Copyright notice** in the footer of every page.
+- **Spam protection** on the contact form, and your email address is hidden from spam robots.
+- **Security settings** that stop other websites from embedding your pages or adding code to them.
+
+The most important protection is your **GitHub account**: anyone who gets into it can change
+your site. Turn on two-factor authentication at https://github.com/settings/security
 
 ## Something look wrong?
 

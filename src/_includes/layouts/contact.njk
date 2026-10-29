@@ -1,28 +1,28 @@
 ---
 layout: layouts/base.njk
 ---
-<section class="wrap contact">
+<section class="chapter correspondence">
   <div>
+    <p class="mono kicker">{{ title }}</p>
     <h1>{{ heading or title }}</h1>
     <div class="prose">{{ content | safe }}</div>
 
     {% if site.commissions_open %}
-      <div class="callout" id="commissions">
-        <h2>Commissions are open</h2>
+      <div class="notice" id="commissions">
+        <p class="mono kicker">Commissions are open</p>
         <p>{{ site.commissions_text }}</p>
       </div>
     {% endif %}
 
-    <h2 class="small-heading">Find me online</h2>
+    <p class="mono kicker">Elsewhere</p>
     {% include "partials/social.njk" %}
   </div>
 
-  <form class="contact-form" id="request"
-        {% if site.contact_form_endpoint %}action="{{ site.contact_form_endpoint }}" method="POST"{% else %}data-mailto="{{ site.email }}"{% endif %}>
-    <h2>Send a message</h2>
-    <label>Your name<input name="name" required autocomplete="name"></label>
-    <label>Your email<input name="email" type="email" required autocomplete="email"></label>
-    <label>What's this about?
+  <form class="letter" id="request"
+        {% if site.contact_form_endpoint %}action="{{ site.contact_form_endpoint }}" method="POST"{% else %}data-mailto="{{ site.email | obfuscate }}"{% endif %}>
+    <label><span class="mono">Your name</span><input name="name" required autocomplete="name" maxlength="100"></label>
+    <label><span class="mono">Your email</span><input name="email" type="email" required autocomplete="email" maxlength="200"></label>
+    <label><span class="mono">Regarding</span>
       <select name="topic">
         {% if site.commissions_open %}<option>Commission / art request</option>{% endif %}
         <option>Buying a piece</option>
@@ -30,10 +30,11 @@ layout: layouts/base.njk
         <option>Something else</option>
       </select>
     </label>
-    <label>Artwork (optional)<input name="artwork" id="about-field" placeholder="e.g. the title of a piece"></label>
-    <label>Message<textarea name="message" rows="6" required placeholder="Ideas, sizes, budget, deadlines — anything that helps."></textarea></label>
-    <input type="text" name="_gotcha" class="sr-only" tabindex="-1" autocomplete="off" aria-hidden="true">
-    <button class="btn" type="submit">Send message</button>
-    {% if not site.contact_form_endpoint %}<p class="muted small">This opens your email app with the message ready to send{% if site.email %}, or email me directly at <a href="mailto:{{ site.email }}">{{ site.email }}</a>{% endif %}.</p>{% endif %}
+    <label><span class="mono">Which work (optional)</span><input name="artwork" id="about-field" maxlength="200"></label>
+    <label><span class="mono">Your message</span><textarea name="message" rows="7" required maxlength="5000" placeholder="Ideas, sizes, budget, timing — whatever helps."></textarea></label>
+    {# Hidden trap field: real people never see it, spam robots fill it in. #}
+    <div class="trap" aria-hidden="true"><label>Leave this empty<input type="text" name="_gotcha" tabindex="-1" autocomplete="off"></label></div>
+    <button class="btn" type="submit">Send</button>
+    {% if not site.contact_form_endpoint %}<p class="muted small">This opens your email app with the letter ready to send.</p>{% endif %}
   </form>
 </section>

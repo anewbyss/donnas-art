@@ -1,5 +1,6 @@
+import path from "node:path";
 import { HtmlBasePlugin } from "@11ty/eleventy";
-import { eleventyImageTransformPlugin } from "@11ty/eleventy-img";
+import Image, { eleventyImageTransformPlugin } from "@11ty/eleventy-img";
 
 // Turns "Abstract & Bold" into "abstract-bold" for web addresses.
 const slugify = (s = "") =>
@@ -20,11 +21,28 @@ const STATUS_LABELS = {
 };
 
 export default function (eleventyConfig) {
-  // Uploaded images and site assets are copied as-is (full-size originals
-  // are used for the zoom view and for social-media share previews).
-  eleventyConfig.addPassthroughCopy("src/images");
+  // Uploaded originals are never published. Visitors only ever get resized
+  // copies (max 1600px), re-encoded without camera/GPS metadata.
   eleventyConfig.addPassthroughCopy("src/assets");
   eleventyConfig.addPassthroughCopy({ "src/robots.txt": "robots.txt" });
+
+  // Address of a resized copy of an uploaded image, for the zoom view and
+  // share previews.
+  eleventyConfig.addAsyncFilter("imageUrl", async (src, width = 1600) => {
+    if (!src) return "";
+    if (/^https?:\/\//.test(src)) return src;
+    try {
+      const meta = await Image(path.join("src", src), {
+        widths: [width],
+        formats: ["jpeg"],
+        outputDir: "_site/img/",
+        urlPath: "/img/",
+      });
+      return meta.jpeg.at(-1).url;
+    } catch {
+      return "";
+    }
+  });
 
   // Automatically creates small, fast-loading versions of every <img>.
   eleventyConfig.addPlugin(eleventyImageTransformPlugin, {
@@ -115,6 +133,28 @@ export default function (eleventyConfig) {
       prev: i > 0 ? artworks[i - 1] : null,
       next: i >= 0 && i < artworks.length - 1 ? artworks[i + 1] : null,
     };
+  });
+
+  // Catalogue number: the oldest piece is plate 1, newest gets the highest.
+  eleventyConfig.addFilter("plateNo", (artworks, url) => {
+    const i = artworks.findIndex((a) => a.url === url);
+    return i < 0 ? "" : String(artworks.length - i).padStart(3, "0");
+  });
+
+  eleventyConfig.addFilter("roman", (n) => {
+    const map = [[100, "C"], [90, "XC"], [50, "L"], [40, "XL"], [10, "X"], [9, "IX"], [5, "V"], [4, "IV"], [1, "I"]];
+    let out = "";
+    for (const [v, r] of map) while (n >= v) { out += r; n -= v; }
+    return out;
+  });
+
+  // Hides an email address from simple spam robots (browsers still show it).
+  eleventyConfig.addFilter("obfuscate", (s = "") =>
+    [...String(s)].map((c) => `&#${c.charCodeAt(0)};`).join("")
+  );
+
+  eleventyConfig.addFilter("origin", (u) => {
+    try { return new URL(u).origin; } catch { return ""; }
   });
 
   eleventyConfig.addFilter("money", (amount, currency = "USD") => {
