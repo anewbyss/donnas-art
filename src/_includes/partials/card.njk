@@ -1,13 +1,11 @@
-{#- One artwork tile in a grid. Expects `art`. -#}
-<figure class="card" data-categories="{% for c in art.data.categories | toList %}{{ c | slugify }} {% endfor %}" data-status="{{ art.data.status }}">
-  <a href="{{ art.url }}">
-    <img src="{{ art.data.image }}" alt="{{ art.data.alt or art.data.title }}" sizes="(min-width: 1100px) 360px, (min-width: 700px) 45vw, 92vw">
+{#- One artwork plate in a grid. Expects `art`. -#}
+<figure class="plate" data-categories="{% for c in art.data.categories | toList %}{{ c | slugify }} {% endfor %}" data-status="{{ art.data.status }}">
+  <a href="{{ art.url }}" class="plate-frame">
+    <img src="{{ art.data.image }}" alt="{{ art.data.alt or art.data.title }}" draggable="false" sizes="(min-width: 1100px) 380px, (min-width: 700px) 45vw, 92vw">
   </a>
   <figcaption>
-    <a href="{{ art.url }}" class="card-title">{{ art.data.title }}</a>
-    <span class="card-meta">
-      {%- if art.data.year %}{{ art.data.year }}{% endif -%}
-      {%- if art.data.status and art.data.status != "nfs" %} · <span class="status status-{{ art.data.status }}">{{ art.data.status | statusLabel }}</span>{% endif -%}
-    </span>
+    <span class="mono plate-no">Pl. {{ collections.artworks | plateNo(art.url) }}{% if art.data.year %} · {{ art.data.year }}{% endif %}</span>
+    <a href="{{ art.url }}" class="plate-title">{{ art.data.title }}</a>
+    {%- if art.data.status and art.data.status != "nfs" %}<span class="mono status status-{{ art.data.status }}">{{ art.data.status | statusLabel }}</span>{% endif %}
   </figcaption>
 </figure>

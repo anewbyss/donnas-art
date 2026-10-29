@@ -1,13 +1,13 @@
-{#- Share buttons. Expects `shareUrl`, `shareTitle`, `shareImage`. -#}
+{#- Share links. Expects `shareUrl`, `shareTitle`, `shareImage`. -#}
 {%- set u = shareUrl | urlencode -%}
 {%- set t = shareTitle | urlencode -%}
-<div class="share" data-share-url="{{ shareUrl }}" data-share-title="{{ shareTitle }}">
-  <span class="share-label">Share</span>
-  <button type="button" class="btn-chip js-native-share" hidden>Share…</button>
-  <a class="btn-chip" target="_blank" rel="noopener" href="https://www.facebook.com/sharer/sharer.php?u={{ u }}">Facebook</a>
-  <a class="btn-chip" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/button/?url={{ u }}&media={{ shareImage | urlencode }}&description={{ t }}">Pinterest</a>
-  <a class="btn-chip" target="_blank" rel="noopener" href="https://x.com/intent/post?url={{ u }}&text={{ t }}">X</a>
-  <a class="btn-chip" target="_blank" rel="noopener" href="https://wa.me/?text={{ t }}%20{{ u }}">WhatsApp</a>
-  <a class="btn-chip" href="mailto:?subject={{ t }}&body={{ u }}">Email</a>
-  <button type="button" class="btn-chip js-copy-link">Copy link</button>
+<div class="share mono" data-share-url="{{ shareUrl }}" data-share-title="{{ shareTitle }}">
+  <span class="label">Pass it on —</span>
+  <button type="button" class="js-native-share" hidden>Share…</button>
+  <button type="button" class="js-copy-link">Copy link</button>
+  <a target="_blank" rel="noopener noreferrer" href="https://www.facebook.com/sharer/sharer.php?u={{ u }}">Facebook</a>
+  <a target="_blank" rel="noopener noreferrer" href="https://pinterest.com/pin/create/button/?url={{ u }}&media={{ shareImage | urlencode }}&description={{ t }}">Pinterest</a>
+  <a target="_blank" rel="noopener noreferrer" href="https://x.com/intent/post?url={{ u }}&text={{ t }}">X</a>
+  <a target="_blank" rel="noopener noreferrer" href="https://wa.me/?text={{ t }}%20{{ u }}">WhatsApp</a>
+  <a href="mailto:?subject={{ t }}&body={{ u }}">Email</a>
 </div>

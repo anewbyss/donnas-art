@@ -1,11 +1,12 @@
 ---
 layout: layouts/base.njk
 ---
-<article class="wrap page{% if image %} page-with-image{% endif %}">
+<article class="chapter leaf{% if image %} leaf-with-image{% endif %}">
   {% if image %}
-    <div class="page-image"><img src="{{ image }}" alt="{{ title }}" sizes="(min-width: 900px) 420px, 92vw" loading="eager"></div>
+    <div class="arch arch-small"><img src="{{ image }}" alt="{{ title }}" draggable="false" sizes="(min-width: 900px) 400px, 80vw" loading="eager"></div>
   {% endif %}
   <div>
+    <p class="mono kicker">{{ title }}</p>
     <h1>{{ heading or title }}</h1>
     <div class="prose">{{ content | safe }}</div>
   </div>

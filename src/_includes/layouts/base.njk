@@ -1,81 +1,80 @@
 {%- set pageTitle = (title + " · " + site.title) if title and title != site.title else (site.title + " · " + site.tagline) -%}
 {%- set pageDescription = (description or (content | plain) or site.description) | truncate(160) -%}
-{%- set shareImage = (image or site.hero_image) | absolute(env.siteUrl) -%}
+{%- set shareImage = ((image or site.hero_image) | imageUrl(1200)) | absolute(env.siteUrl) -%}
 {%- set pageUrl = page.url | absolute(env.siteUrl) -%}
+{%- set formOrigin = site.contact_form_endpoint | origin -%}
 <!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  {# Basic protections: only load code and fonts from trusted places, and keep
+     visitors' browsing private when they follow links away from the site. #}
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'{% if formOrigin %} {{ formOrigin }}{% endif %}; form-action 'self' https://www.paypal.com{% if formOrigin %} {{ formOrigin }}{% endif %}; base-uri 'self'; object-src 'none'; upgrade-insecure-requests">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  {# Asks AI image tools not to collect or train on this artwork. #}
+  <meta name="robots" content="index, follow, noai, noimageai">
   <title>{{ pageTitle }}</title>
   <meta name="description" content="{{ pageDescription }}">
   <link rel="canonical" href="{{ pageUrl }}">
 
-  {# Previews when the page is shared on Facebook, Pinterest, iMessage, X, etc. #}
+  {# Previews when the page is shared on Instagram stories, Facebook, Pinterest, iMessage, etc. #}
   <meta property="og:site_name" content="{{ site.title }}">
   <meta property="og:type" content="{{ 'article' if layout == 'layouts/artwork.njk' else 'website' }}">
   <meta property="og:title" content="{{ title or site.title }}">
   <meta property="og:description" content="{{ pageDescription }}">
   <meta property="og:url" content="{{ pageUrl }}">
-  <meta property="og:image" content="{{ shareImage }}">
+  {% if shareImage %}<meta property="og:image" content="{{ shareImage }}">{% endif %}
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="{{ title or site.title }}">
   <meta name="twitter:description" content="{{ pageDescription }}">
-  <meta name="twitter:image" content="{{ shareImage }}">
+  {% if shareImage %}<meta name="twitter:image" content="{{ shareImage }}">{% endif %}
 
   <link rel="alternate" type="application/atom+xml" title="New work from {{ site.title }}" href="/feed.xml">
   <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <meta name="theme-color" content="#0e0c12">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=IM+Fell+English:ital@0;1&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/assets/css/style.css">
-  {% block head %}{% endblock %}
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
-  <header class="site-header">
-    <div class="wrap header-inner">
-      <a class="brand" href="/">{{ site.title }}</a>
-      <button class="nav-toggle" aria-expanded="false" aria-controls="site-nav">
-        <span class="sr-only">Menu</span><span class="bar"></span><span class="bar"></span>
-      </button>
-      <nav id="site-nav" class="site-nav">
-        {%- set nav = [
-          { url: "/", label: "Home" },
-          { url: "/gallery/", label: "Gallery" },
-          { url: "/collections/", label: "Collections" },
-          { url: "/about/", label: "About" },
-          { url: "/contact/", label: "Contact" }
-        ] -%}
-        {% for item in nav %}
-          <a href="{{ item.url }}"{% if page.url == item.url or (item.url != '/' and page.url.startsWith(item.url)) %} aria-current="page"{% endif %}>{{ item.label }}</a>
-        {% endfor %}
-        {% if site.commissions_open %}<a class="nav-cta" href="/contact/#request">Request art</a>{% endif %}
-      </nav>
-    </div>
+  <header class="masthead">
+    <a class="wordmark" href="/" aria-label="{{ site.title }} — home">
+      {% include "partials/sigil.njk" %}
+      <span class="opal-text">{{ site.title }}</span>
+    </a>
+    <nav class="index-nav" aria-label="Main">
+      {%- set nav = [
+        { url: "/gallery/", label: "The Works" },
+        { url: "/collections/", label: "Arcana" },
+        { url: "/about/", label: "The Artist" },
+        { url: "/contact/", label: "Correspondence" }
+      ] -%}
+      {% for item in nav %}
+        <a href="{{ item.url }}"{% if page.url.startsWith(item.url) %} aria-current="page"{% endif %}><span class="numeral">{{ loop.index | roman }}</span>{{ item.label }}</a>
+      {% endfor %}
+    </nav>
   </header>
 
   <main id="main">
     {{ content | safe }}
   </main>
 
-  <footer class="site-footer">
-    <div class="wrap footer-inner">
-      <div>
-        <p class="brand">{{ site.title }}</p>
-        <p class="muted">{{ site.tagline }}</p>
-      </div>
-      {% include "partials/social.njk" %}
-      <p class="muted small">© {{ "" | year }} {{ site.title }}. All artwork is protected by copyright. · <a href="/feed.xml">Follow new work (RSS)</a></p>
-    </div>
+  <footer class="colophon">
+    <div class="rule" aria-hidden="true"><span>✦</span></div>
+    {% include "partials/social.njk" %}
+    <p class="mono">© {{ "" | year }} {{ site.title }} — all works protected by copyright.<br>No reproduction, resale or AI training without written permission.</p>
+    <p class="mono"><a href="/feed.xml">Follow new works by RSS</a></p>
   </footer>
 
   {# Full-screen viewer used when an image is clicked #}
   <div class="lightbox" hidden role="dialog" aria-modal="true" aria-label="Image viewer">
     <button class="lb-close" aria-label="Close">×</button>
-    <button class="lb-prev" aria-label="Previous image">‹</button>
-    <img alt="">
-    <button class="lb-next" aria-label="Next image">›</button>
+    <button class="lb-prev" aria-label="Previous image">←</button>
+    <img alt="" draggable="false">
+    <button class="lb-next" aria-label="Next image">→</button>
   </div>
   <script src="/assets/js/main.js" defer></script>
 </body>

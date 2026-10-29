@@ -1,4 +1,4 @@
-# Donna's Art — portfolio website
+# opal.occult — portfolio website
 
 A fast, shareable art portfolio with a gallery, collections (styles / eras / themes),
 artwork pages with **Etsy** and **PayPal** purchase buttons, a contact / commission

@@ -1,11 +1,13 @@
 ---
-title: About
-heading: About the artist
+title: The Artist
+heading: Behind opal.occult
 image: /images/uploads/sample-portrait.jpg
 permalink: /about/
 ---
-Hello, and thank you for visiting! I've been making art for most of my life — first with pencils at the kitchen table, then with oils, watercolours and anything else I could get my hands on.
+*Replace this with your own words.*
 
-This site is my living portfolio: a home for work old and new, organised by style, era and theme. Some pieces are available to own, some have already found homes, and many more are still to come.
+A few lines about who you are, what draws you to the strange and the beautiful, the materials you love, and how long you've been making work.
 
-If something here speaks to you, or you'd like a piece made just for you, I'd love to hear from you on the [contact page](/contact/).
+This site is a living archive — old pieces and new, gathered by style, era and theme. Some are available to take home; some already live elsewhere.
+
+You'll find day-to-day work on [Instagram](https://www.instagram.com/opal.occult/). For commissions or questions, [send word](/contact/).

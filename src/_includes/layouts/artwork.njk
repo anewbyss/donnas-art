@@ -5,51 +5,47 @@ layout: layouts/base.njk
 {%- set pageUrl = page.url | absolute(env.siteUrl) -%}
 {%- set nb = collections.artworks | neighbours(page.url) -%}
 {%- set cats = collections.categories | categoriesFor(categories) -%}
-<article class="wrap artwork">
-  <div class="artwork-media">
+{%- set plate = collections.artworks | plateNo(page.url) -%}
+<article class="specimen">
+  <div class="specimen-media">
     {% for img in images %}
-      <a class="zoom" href="{{ img }}" data-lightbox="artwork" aria-label="View larger">
-        <img src="{{ img }}" alt="{{ alt or title }}{% if not loop.first %} (view {{ loop.index }}){% endif %}"
+      <a class="mat" href="{{ img | imageUrl }}" data-lightbox="artwork" aria-label="View larger">
+        <img src="{{ img }}" alt="{{ alt or title }}{% if not loop.first %} (view {{ loop.index }}){% endif %}" draggable="false"
              sizes="(min-width: 1100px) 680px, 92vw"{% if loop.first %} loading="eager" fetchpriority="high"{% endif %}>
       </a>
     {% endfor %}
   </div>
 
-  <div class="artwork-info">
-    <p class="eyebrow"><a href="/gallery/">← Gallery</a></p>
+  <div class="specimen-label">
+    <p class="mono crumb"><a href="/gallery/">The Works</a> / Plate {{ plate }}</p>
     <h1>{{ title }}</h1>
-    <dl class="facts">
-      {% if year %}<div><dt>Year</dt><dd>{{ year }}</dd></div>{% endif %}
-      {% if medium %}<div><dt>Medium</dt><dd>{{ medium }}</dd></div>{% endif %}
-      {% if size %}<div><dt>Size</dt><dd>{{ size }}</dd></div>{% endif %}
-      {% if status %}<div><dt>Status</dt><dd><span class="status status-{{ status }}">{{ status | statusLabel }}</span></dd></div>{% endif %}
-    </dl>
+    <table class="ledger">
+      {% if year %}<tr><th>Year</th><td>{{ year }}</td></tr>{% endif %}
+      {% if medium %}<tr><th>Medium</th><td>{{ medium }}</td></tr>{% endif %}
+      {% if size %}<tr><th>Size</th><td>{{ size }}</td></tr>{% endif %}
+      {% if status %}<tr><th>Status</th><td><span class="status status-{{ status }}">{{ status | statusLabel }}</span></td></tr>{% endif %}
+      {% if cats.length %}<tr><th>Arcana</th><td>{% for c in cats %}<a href="{{ c.url }}">{{ c.data.title }}</a>{% if not loop.last %}, {% endif %}{% endfor %}</td></tr>{% endif %}
+    </table>
 
     {% if content | trim %}<div class="prose">{{ content | safe }}</div>{% endif %}
 
     {% include "partials/buy.njk" %}
 
-    {% if cats.length %}
-      <p class="tags">
-        {% for c in cats %}<a class="btn-chip" href="{{ c.url }}">{{ c.data.title }}</a>{% endfor %}
-      </p>
-    {% endif %}
-
-    {% set shareUrl = pageUrl %}{% set shareTitle = title + " by " + site.title %}{% set shareImage = image | absolute(env.siteUrl) %}
+    {% set shareUrl = pageUrl %}{% set shareTitle = title + " — " + site.title %}{% set shareImage = (image | imageUrl(1200)) | absolute(env.siteUrl) %}
     {% include "partials/share.njk" %}
   </div>
 </article>
 
-<nav class="wrap prev-next" aria-label="More artwork">
-  {% if nb.prev %}<a href="{{ nb.prev.url }}">← {{ nb.prev.data.title }}</a>{% else %}<span></span>{% endif %}
-  {% if nb.next %}<a href="{{ nb.next.url }}">{{ nb.next.data.title }} →</a>{% endif %}
+<nav class="turn-page mono" aria-label="More works">
+  {% if nb.next %}<a href="{{ nb.next.url }}"><span>← Earlier plate</span>{{ nb.next.data.title }}</a>{% else %}<span></span>{% endif %}
+  {% if nb.prev %}<a href="{{ nb.prev.url }}" class="right"><span>Later plate →</span>{{ nb.prev.data.title }}</a>{% endif %}
 </nav>
 
-{% set rel = collections.artworks | related(page.url, 4) %}
+{% set rel = collections.artworks | related(page.url, 3) %}
 {% if rel.length %}
-<section class="wrap section">
-  <h2>You may also like</h2>
-  <div class="grid">
+<section class="chapter">
+  <header class="chapter-head"><h2>Kindred works</h2></header>
+  <div class="plates plates-3">
     {% for art in rel %}{% include "partials/card.njk" %}{% endfor %}
   </div>
 </section>
@@ -60,9 +56,10 @@ layout: layouts/base.njk
   "@context": "https://schema.org",
   "@type": "VisualArtwork",
   "name": {{ title | json | safe }},
-  "image": {{ image | absolute(env.siteUrl) | json | safe }},
+  "image": {{ shareImage | json | safe }},
   "url": {{ pageUrl | json | safe }},
-  "creator": { "@type": "Person", "name": {{ site.title | json | safe }} }
+  "creator": { "@type": "Person", "name": {{ site.title | json | safe }} },
+  "copyrightHolder": { "@type": "Person", "name": {{ site.title | json | safe }} }
   {%- if medium %}, "artMedium": {{ medium | json | safe }}{% endif %}
   {%- if year %}, "dateCreated": {{ year | string | json | safe }}{% endif %}
   {%- if status == "available" and price %},
